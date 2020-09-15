@@ -1,0 +1,58 @@
+﻿@model LostGamer.Models.Games
+
+@{
+    ViewData["Title"] = "Game";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Games</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            <img src="\gamePhotos\@Html.DisplayFor(model => model.CoverLogo)" width="200" height="300" />
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GameTitle)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GameTitle)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Synopsis)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Synopsis)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category.Category)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Company.CompanyName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Platforms)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Platforms.PlatformName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rating.RatingNum)
+        </dd>
+    </dl>
+</div>
+<div>
+    |
+    <a asp-action="GameLibrary">Back to Game Library</a>
+</div>
