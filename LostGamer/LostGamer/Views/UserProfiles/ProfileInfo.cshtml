@@ -50,6 +50,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit Profile</a> |
+    <a asp-controller="Games" asp-action="GameLibrary">List of Games</a> |
+    <a asp-controller="Guides" asp-action="Index" asp-route-id="@Model.Id">User Guides</a> |
 </div>

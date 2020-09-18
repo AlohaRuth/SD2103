@@ -1,0 +1,42 @@
+﻿@model LostGamer.ViewModels.UserCollectionViewModel
+@{
+    ViewData["Title"] = "UserList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>User Guides</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Guide Title
+            </th>
+            <th>
+                Game
+            </th>
+            <th>
+                Made by
+            </th>
+        </tr>
+    </thead>
+
+    @foreach (var item in @Model.userGuidesColletions)
+    {
+        <tr>
+            <td>
+                @item.Guide.GuideTitle
+            </td>
+            <td>
+                @item.Game
+            </td>
+            <td>
+                @item.UserProfiles
+            </td>
+
+
+            <td>
+                <a asp-controller="Guides" asp-action="GamesGuides">Guides for Game</a> |
+            </td>
+        </tr>
+    }
+</table>

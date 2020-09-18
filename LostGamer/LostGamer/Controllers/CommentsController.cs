@@ -11,26 +11,27 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LostGamer.Controllers
 {
-    public class UserProfilesController : Controller
+    public class CommentsController : Controller
     {
         private readonly LostGamerContext _context;
         private UserManager<IdentityUser> _userManager;
 
-        public UserProfilesController(LostGamerContext context, UserManager<IdentityUser> userManager)
+        public CommentsController(LostGamerContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // GET: UserProfiles
-        [Authorize(Roles = "Administrator")]
+        // GET: Comments
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var lostGamerContext = _context.UserProfiles.Include(u => u.UserType);
+            var lostGamerContext = _context.Comments.Include(c => c.UserProfiles);
             return View(await lostGamerContext.ToListAsync());
         }
 
-        // GET: UserProfiles/Details/5
+        // GET: Comments/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,57 +39,44 @@ namespace LostGamer.Controllers
                 return NotFound();
             }
 
-            var userProfiles = await _context.UserProfiles
-                .Include(u => u.UserType)
+            var comments = await _context.Comments
+                .Include(c => c.UserProfiles)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (userProfiles == null)
+            if (comments == null)
             {
                 return NotFound();
             }
 
-            return View(userProfiles);
+            return View(comments);
         }
 
-        // GET: UserProfiles/Create
+        // GET: Comments/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["UserTypeId"] = new SelectList(_context.UserType, "Id", "TypeName");
+            ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName");
             return View();
         }
 
-        public IActionResult ProfileInfo()
-        {
-            string userID = _userManager.GetUserId(User);
-            UserProfiles profile = _context.UserProfiles.FirstOrDefault(p => p.UserAccountId == userID);
-
-            if (profile == null)
-            {
-                return RedirectToAction("Create");
-            }
-
-            return View(profile);
-
-        }
-
-        // POST: UserProfiles/Create
+        // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,DisplayName,DateCreated,UserTypeId,UserAccountId")] UserProfiles userProfiles)
+        public async Task<IActionResult> Create([Bind("Id,Comment,DatePosted,UserProfilesId")] Comments comments)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(userProfiles);
+                _context.Add(comments);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserTypeId"] = new SelectList(_context.UserType, "Id", "TypeName", userProfiles.UserTypeId);
-            return View(userProfiles);
+            ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
+            return View(comments);
         }
 
-        // GET: UserProfiles/Edit/5
+        // GET: Comments/Edit/5
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -97,24 +85,24 @@ namespace LostGamer.Controllers
                 return NotFound();
             }
 
-            var userProfiles = await _context.UserProfiles.FindAsync(id);
-            if (userProfiles == null)
+            var comments = await _context.Comments.FindAsync(id);
+            if (comments == null)
             {
                 return NotFound();
             }
-            ViewData["UserTypeId"] = new SelectList(_context.UserType, "Id", "TypeName", userProfiles.UserTypeId);
-            return View(userProfiles);
+            ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
+            return View(comments);
         }
 
-        // POST: UserProfiles/Edit/5
+        // POST: Comments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,DisplayName,DateCreated,UserTypeId,UserAccountId")] UserProfiles userProfiles)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,DatePosted,UserProfilesId")] Comments comments)
         {
-            if (id != userProfiles.Id)
+            if (id != comments.Id)
             {
                 return NotFound();
             }
@@ -123,12 +111,12 @@ namespace LostGamer.Controllers
             {
                 try
                 {
-                    _context.Update(userProfiles);
+                    _context.Update(comments);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserProfilesExists(userProfiles.Id))
+                    if (!CommentsExists(comments.Id))
                     {
                         return NotFound();
                     }
@@ -139,11 +127,11 @@ namespace LostGamer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserTypeId"] = new SelectList(_context.UserType, "Id", "TypeName", userProfiles.UserTypeId);
-            return View(userProfiles);
+            ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
+            return View(comments);
         }
 
-        // GET: UserProfiles/Delete/5
+        // GET: Comments/Delete/5
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -152,32 +140,32 @@ namespace LostGamer.Controllers
                 return NotFound();
             }
 
-            var userProfiles = await _context.UserProfiles
-                .Include(u => u.UserType)
+            var comments = await _context.Comments
+                .Include(c => c.UserProfiles)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (userProfiles == null)
+            if (comments == null)
             {
                 return NotFound();
             }
 
-            return View(userProfiles);
+            return View(comments);
         }
 
-        // POST: UserProfiles/Delete/5
+        // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var userProfiles = await _context.UserProfiles.FindAsync(id);
-            _context.UserProfiles.Remove(userProfiles);
+            var comments = await _context.Comments.FindAsync(id);
+            _context.Comments.Remove(comments);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserProfilesExists(int id)
+        private bool CommentsExists(int id)
         {
-            return _context.UserProfiles.Any(e => e.Id == id);
+            return _context.Comments.Any(e => e.Id == id);
         }
     }
 }

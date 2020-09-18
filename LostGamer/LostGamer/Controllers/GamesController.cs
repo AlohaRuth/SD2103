@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LostGamer.Controllers
 {
@@ -28,6 +29,13 @@ namespace LostGamer.Controllers
 
         // GET: Games
         public async Task<IActionResult> Index()
+        {
+            var lostGamerContext = _context.Games.Include(g => g.Category).Include(g => g.Company).Include(g => g.Platforms).Include(g => g.Rating);
+            return View(await lostGamerContext.ToListAsync());
+        }
+
+        // copy Index relable GameLibrary 
+        public async Task<IActionResult> GameLibrary()
         {
             var lostGamerContext = _context.Games.Include(g => g.Category).Include(g => g.Company).Include(g => g.Platforms).Include(g => g.Rating);
             return View(await lostGamerContext.ToListAsync());
@@ -55,7 +63,30 @@ namespace LostGamer.Controllers
             return View(games);
         }
 
+        // Copy Details, paste then Relable Show now GET: Games/Show/5
+        public async Task<IActionResult> Show(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var games = await _context.Games
+                .Include(g => g.Category)
+                .Include(g => g.Company)
+                .Include(g => g.Platforms)
+                .Include(g => g.Rating)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (games == null)
+            {
+                return NotFound();
+            }
+
+            return View(games);
+        }
+
         // GET: Games/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Category");
@@ -69,6 +100,7 @@ namespace LostGamer.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,GameTitle,PlatformsId,CategoryId,RatingId,Synopsis,CompanyId")] Games games,
             IFormFile FilePhoto)
@@ -98,6 +130,7 @@ namespace LostGamer.Controllers
         }
 
         // GET: Games/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -121,6 +154,7 @@ namespace LostGamer.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,GameTitle,PlatformsId,CategoryId,RatingId,Synopsis,CompanyId")] Games games,
             IFormFile FilePhoto)
@@ -158,6 +192,7 @@ namespace LostGamer.Controllers
         }
 
         // GET: Games/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -181,6 +216,7 @@ namespace LostGamer.Controllers
 
         // POST: Games/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

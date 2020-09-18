@@ -1,0 +1,55 @@
+﻿@model LostGamer.Models.Guides
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Guides</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.GuideTitle)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GuideTitle)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Game)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Game.GameTitle)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserProfiles)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserProfiles.DisplayName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateSubmitted)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateSubmitted)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastUpdated)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastUpdated)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GuideContent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GuideContent)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
