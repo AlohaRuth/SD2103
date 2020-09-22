@@ -106,6 +106,23 @@ namespace LostGamer.Controllers
             return View(userProfiles);
         }
 
+        [Authorize]
+        public async Task<IActionResult> EditProfile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userProfiles = await _context.UserProfiles.FindAsync(id);
+            if (userProfiles == null)
+            {
+                return NotFound();
+            }
+            ViewData["UserTypeId"] = new SelectList(_context.UserType, "Id", "TypeName", userProfiles.UserTypeId);
+            return View(userProfiles);
+        }
+
         // POST: UserProfiles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -113,6 +130,40 @@ namespace LostGamer.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,DisplayName,DateCreated,UserTypeId,UserAccountId")] UserProfiles userProfiles)
+        {
+            if (id != userProfiles.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(userProfiles);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserProfilesExists(userProfiles.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["UserTypeId"] = new SelectList(_context.UserType, "Id", "TypeName", userProfiles.UserTypeId);
+            return View(userProfiles);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(int id, [Bind("Id,FirstName,LastName,DisplayName,DateCreated,UserTypeId,UserAccountId")] UserProfiles userProfiles)
         {
             if (id != userProfiles.Id)
             {

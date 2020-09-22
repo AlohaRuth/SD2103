@@ -70,6 +70,13 @@ namespace LostGamer.Models
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.UserProfilesId)
                     .HasConstraintName("FK__Comments__UserPr__5FB337D6");
+
+                entity.Property(e => e.GuideId).HasColumnName("GuideID");
+
+                entity.HasOne(d => d.Guides)
+                   .WithMany(p => p.Comments)
+                   .HasForeignKey(d => d.GuideId)
+                   .HasConstraintName("FK__Comments__Guides__607251E5");
             });
 
             modelBuilder.Entity<Company>(entity =>

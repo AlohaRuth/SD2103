@@ -8,7 +8,7 @@
 <h2>Game Library</h2>
 
 
-<table class="table">
+<table class="table" enctype="multipart/form-data">
     <thead>
         <tr>
             <th>
@@ -45,7 +45,7 @@
                 @Html.DisplayFor(modelItem => item.Synopsis)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CoverLogo)
+                <img src="\gamePhotos\@Html.DisplayFor(modelItem => item.CoverLogo)" width="50" height="75" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Category)

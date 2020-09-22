@@ -8,6 +8,7 @@ namespace LostGamer.Models
         public Guides()
         {
             UserGuidesColletion = new HashSet<UserGuidesColletion>();
+            Comments = new HashSet<Comments>();
         }
 
         public int Id { get; set; }
@@ -21,5 +22,6 @@ namespace LostGamer.Models
         public Games Game { get; set; }
         public UserProfiles UserProfiles { get; set; }
         public ICollection<UserGuidesColletion> UserGuidesColletion { get; set; }
+        public ICollection<Comments> Comments { get; set; }
     }
 }

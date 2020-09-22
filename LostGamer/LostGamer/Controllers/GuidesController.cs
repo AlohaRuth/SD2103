@@ -30,10 +30,17 @@ namespace LostGamer.Controllers
             var lostGamerContext = _context.Guides.Include(g => g.Game).Include(g => g.UserProfiles);
             return View(await lostGamerContext.ToListAsync());
         }
+        //copy Index, paste then relable UserGuides.
+        public async Task<IActionResult> UserGuides()
+        {
+            var lostGamerContext = _context.Guides.Include(g => g.Game).Include(g => g.UserProfiles);
+            return View(await lostGamerContext.ToListAsync());
+        }
 
         //copy Index, paste then relable GamesGuides.
-        public async Task<IActionResult> GamesGuides()
+        public async Task<IActionResult> GamesGuides(int? id)
         {
+
             var lostGamerContext = _context.Guides.Include(g => g.Game).Include(g => g.UserProfiles);
             return View(await lostGamerContext.ToListAsync());
         }
@@ -82,8 +89,10 @@ namespace LostGamer.Controllers
         [Authorize]
         public IActionResult Create(int id)
         {
+            string userID = _userManager.GetUserId(User);
+            UserProfiles profile = _context.UserProfiles.FirstOrDefault(p => p.UserAccountId == userID);
             ViewData["GameId"] = new SelectList(_context.Games, "Id", "GameTitle");
-            ViewBag.UserProfileId = id;
+            ViewBag.UserProfileId = profile.Id;
             return View();
         }
 

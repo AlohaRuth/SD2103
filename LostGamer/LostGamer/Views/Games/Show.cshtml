@@ -10,7 +10,7 @@
 <div>
     <h4>Details</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal" >
         <dd>
             <img src="\gamePhotos\@Html.DisplayFor(model => model.CoverLogo)" width="200" height="300" />
         </dd>
@@ -53,6 +53,6 @@
     </dl>
 </div>
 <div>
-    <a asp-controller="Guides" asp-action="GamesGuides">Guides for Game</a> |
+    <a asp-controller="Guides" asp-action="GamesGuides" asp-route-id="@Model.Id">Guides for Game</a> |
     <a asp-action="GameLibrary">Back to Game Library</a>|
 </div>

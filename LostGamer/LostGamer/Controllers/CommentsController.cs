@@ -26,7 +26,7 @@ namespace LostGamer.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var lostGamerContext = _context.Comments.Include(c => c.UserProfiles);
+            var lostGamerContext = _context.Comments.Include(c => c.UserProfiles).Include(g => g.Guides);
             return View(await lostGamerContext.ToListAsync());
         }
 
@@ -41,6 +41,7 @@ namespace LostGamer.Controllers
 
             var comments = await _context.Comments
                 .Include(c => c.UserProfiles)
+                .Include(c => c.Guides)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comments == null)
             {
@@ -52,9 +53,12 @@ namespace LostGamer.Controllers
 
         // GET: Comments/Create
         [Authorize]
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName");
+            string userID = _userManager.GetUserId(User);
+            UserProfiles profile = _context.UserProfiles.FirstOrDefault(p => p.UserAccountId == userID);
+            ViewBag.UserProfileId = profile.Id;
+            ViewBag.GuideId = id;
             return View();
         }
 
@@ -64,7 +68,7 @@ namespace LostGamer.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Comment,DatePosted,UserProfilesId")] Comments comments)
+        public async Task<IActionResult> Create([Bind("Comment,DatePosted,UserProfilesId,GuideId")] Comments comments)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +76,7 @@ namespace LostGamer.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
+            //ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
             return View(comments);
         }
 
@@ -90,7 +94,7 @@ namespace LostGamer.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
+            //ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
             return View(comments);
         }
 
@@ -100,7 +104,7 @@ namespace LostGamer.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,DatePosted,UserProfilesId")] Comments comments)
+        public async Task<IActionResult> Edit(int id, [Bind("Comment,DatePosted,UserProfilesId,GuideId")] Comments comments)
         {
             if (id != comments.Id)
             {
@@ -127,7 +131,7 @@ namespace LostGamer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
+            //ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
             return View(comments);
         }
 
@@ -142,6 +146,7 @@ namespace LostGamer.Controllers
 
             var comments = await _context.Comments
                 .Include(c => c.UserProfiles)
+                .Include(c => c.Guides)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comments == null)
             {

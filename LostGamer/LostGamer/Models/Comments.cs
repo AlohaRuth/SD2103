@@ -14,7 +14,9 @@ namespace LostGamer.Models
         public string Comment { get; set; }
         public DateTime? DatePosted { get; set; }
         public int? UserProfilesId { get; set; }
+        public int? GuideId { get; set; }
 
+        public Guides Guides { get; set; }
         public UserProfiles UserProfiles { get; set; }
         public ICollection<UserComments> UserComments { get; set; }
     }
