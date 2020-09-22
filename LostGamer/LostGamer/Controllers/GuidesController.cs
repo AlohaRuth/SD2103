@@ -41,7 +41,8 @@ namespace LostGamer.Controllers
         public async Task<IActionResult> GamesGuides(int? id)
         {
 
-            var lostGamerContext = _context.Guides.Include(g => g.Game).Include(g => g.UserProfiles);
+            var lostGamerContext = _context.Guides.Where(g => g.GameId == id);
+            //var lostGamerContext = _context.Guides.Include(g => g.Game.Id == id).Include(g => g.UserProfiles);
             return View(await lostGamerContext.ToListAsync());
         }
 
