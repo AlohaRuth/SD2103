@@ -1,0 +1,21 @@
+﻿body {
+}
+/*Navbar decore*/
+.navbar-inverse {
+    background-color: limegreen;
+    border-color: #080808;
+}
+
+    .navbar-inverse a {
+        color: black;
+    }
+
+.navbar-inverse .navbar-nav > li > a {
+        color: black;
+    }
+/*jumbotron decore*/
+.jumbotron {
+    color: black;
+    background-color: limegreen;
+}
+

@@ -35,16 +35,4 @@ body {
         display: none;
     }
 }
-.navbar-inverse {
-    background-color: #3c763d;
-    border-color: #080808;
-}
 
-.navbar-inverse .navbar-nav > li > a {
-        color: #080505;
-}
-
-.jumbotron {
-    color: black;
-    background-color: lightseagreen;
-}
