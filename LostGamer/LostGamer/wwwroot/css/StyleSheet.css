@@ -1,17 +1,21 @@
-﻿body {
-}
+﻿
 /*Navbar decore*/
 .navbar-inverse {
     background-color: limegreen;
     border-color: #080808;
 }
 
-    .navbar-inverse a {
+.navbar-inverse .navbar-brand {
         color: black;
-    }
+}
+
+.navbar-inverse a {
+        color: black;
+}
 
 .navbar-inverse .navbar-nav > li > a {
         color: black;
+        font-style:
     }
 /*jumbotron decore*/
 .jumbotron {
