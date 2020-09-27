@@ -31,9 +31,9 @@ namespace LostGamer.Controllers
             return View(await lostGamerContext.ToListAsync());
         }
         //copy Index, paste then relable UserGuides.
-        public async Task<IActionResult> UserGuides()
+        public async Task<IActionResult> UserGuides(int? id)
         {
-            var lostGamerContext = _context.Guides.Include(g => g.Game).Include(g => g.UserProfiles);
+            var lostGamerContext = _context.Guides.Where(g => g.UserProfilesId == id).Include(g => g.Game).Include(g => g.UserProfiles);
             return View(await lostGamerContext.ToListAsync());
         }
 
@@ -41,7 +41,7 @@ namespace LostGamer.Controllers
         public async Task<IActionResult> GamesGuides(int? id)
         {
 
-            var lostGamerContext = _context.Guides.Where(g => g.GameId == id);
+            var lostGamerContext = _context.Guides.Where(g => g.GameId == id).Include(g => g.Game).Include(g => g.UserProfiles);
             //var lostGamerContext = _context.Guides.Include(g => g.Game.Id == id).Include(g => g.UserProfiles);
             return View(await lostGamerContext.ToListAsync());
         }
@@ -109,7 +109,7 @@ namespace LostGamer.Controllers
             {
                 _context.Add(guides);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Guide));
             }
             ViewData["GameId"] = new SelectList(_context.Games, "Id", "GameTitle", guides.GameId);
             //ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", guides.UserProfilesId);

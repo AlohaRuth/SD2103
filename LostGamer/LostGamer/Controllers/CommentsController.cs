@@ -23,15 +23,29 @@ namespace LostGamer.Controllers
         }
 
         // GET: Comments
-        [Authorize]
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index(int? id)
         {
-            var lostGamerContext = _context.Comments.Include(c => c.UserProfiles).Include(g => g.Guides);
+            var lostGamerContext = _context.Comments.Where(g => g.Guides.Id == id).Include(c => c.UserProfiles).Include(g => g.Guides);
+            return View(await lostGamerContext.ToListAsync());
+        }
+
+        //copy and paste index and added code so user view comments
+        public async Task<IActionResult> ViewComments(int? id)
+        {
+            var lostGamerContext = _context.Comments.Where(g => g.Guides.Id == id).Include(c => c.UserProfiles).Include(g => g.Guides);
+            return View(await lostGamerContext.ToListAsync());
+        }
+
+        //copy and paste index and added code so user can reflect on there comments
+        public async Task<IActionResult> UserComments(int? id)
+        {
+            var lostGamerContext = _context.Comments.Where(c => c.UserProfiles.Id == id).Include(c => c.UserProfiles).Include(g => g.Guides);
             return View(await lostGamerContext.ToListAsync());
         }
 
         // GET: Comments/Details/5
-        [Authorize]
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -74,7 +88,7 @@ namespace LostGamer.Controllers
             {
                 _context.Add(comments);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ViewComments));
             }
             //ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
             return View(comments);
@@ -129,7 +143,7 @@ namespace LostGamer.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ViewComments));
             }
             //ViewData["UserProfilesId"] = new SelectList(_context.UserProfiles, "Id", "DisplayName", comments.UserProfilesId);
             return View(comments);
@@ -165,7 +179,7 @@ namespace LostGamer.Controllers
             var comments = await _context.Comments.FindAsync(id);
             _context.Comments.Remove(comments);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ViewComments));
         }
 
         private bool CommentsExists(int id)

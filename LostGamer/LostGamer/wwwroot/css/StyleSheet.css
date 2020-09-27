@@ -15,8 +15,12 @@
 
 .navbar-inverse .navbar-nav > li > a {
         color: black;
-        font-style:
-    }
+        font-weight: bold;
+}
+.navbar-inverse .btn-link {
+        color: black;
+}
+
 /*jumbotron decore*/
 .jumbotron {
     color: black;

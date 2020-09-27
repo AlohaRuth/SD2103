@@ -50,6 +50,7 @@ namespace LostGamer.Controllers
         }
 
         // GET: UserProfiles/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["UserTypeId"] = new SelectList(_context.UserType, "Id", "TypeName");
@@ -74,6 +75,7 @@ namespace LostGamer.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,DisplayName,DateCreated,UserTypeId,UserAccountId")] UserProfiles userProfiles)
         {
@@ -81,7 +83,7 @@ namespace LostGamer.Controllers
             {
                 _context.Add(userProfiles);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(ProfileInfo));
             }
             ViewData["UserTypeId"] = new SelectList(_context.UserType, "Id", "TypeName", userProfiles.UserTypeId);
             return View(userProfiles);
