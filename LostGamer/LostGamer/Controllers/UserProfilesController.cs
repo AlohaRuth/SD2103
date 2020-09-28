@@ -60,7 +60,7 @@ namespace LostGamer.Controllers
         public IActionResult ProfileInfo()
         {
             string userID = _userManager.GetUserId(User);
-            UserProfiles profile = _context.UserProfiles.FirstOrDefault(p => p.UserAccountId == userID);
+            UserProfiles profile = _context.UserProfiles.Include(u => u.UserType).FirstOrDefault(p => p.UserAccountId == userID);
 
             if (profile == null)
             {

@@ -8,17 +8,13 @@
 <h2>Game's Guides</h2>
 
 <p>
-    <a asp-controller="Games" asp-action="Show">Back to Game</a>|
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New Guide</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.GuideTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GuideContent)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateSubmitted)
@@ -40,9 +36,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.GuideTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GuideContent)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateSubmitted)

@@ -8,6 +8,7 @@ namespace LostGamer.ViewModels
 {
     public class UserCollectionViewModel
     {
+        public IEnumerable<Comments> comments;
         public IEnumerable<Guides> guides;
         public IEnumerable<UserProfiles> userProfiles;
         public IEnumerable<Games> games;

@@ -33,14 +33,14 @@ namespace LostGamer.Controllers
         //copy and paste index and added code so user view comments
         public async Task<IActionResult> ViewComments(int? id)
         {
-            var lostGamerContext = _context.Comments.Where(g => g.Guides.Id == id).Include(c => c.UserProfiles).Include(g => g.Guides);
+            var lostGamerContext = _context.Comments.Where(c => c.Guides.Id == id).Include(c => c.UserProfiles).Include(c => c.Guides);
             return View(await lostGamerContext.ToListAsync());
         }
 
         //copy and paste index and added code so user can reflect on there comments
         public async Task<IActionResult> UserComments(int? id)
         {
-            var lostGamerContext = _context.Comments.Where(c => c.UserProfiles.Id == id).Include(c => c.UserProfiles).Include(g => g.Guides);
+            var lostGamerContext = _context.Comments.Where(c => c.UserProfiles.Id == id).Include(c => c.UserProfiles).Include(c => c.Guides);
             return View(await lostGamerContext.ToListAsync());
         }
 

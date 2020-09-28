@@ -51,7 +51,7 @@
 </div>
 <div>
     |
-    <a asp-action="GamesGuides">Back to List</a>|
+    <a asp-action="GamesGuides" asp-route-id="@Model.GameId">Back to List</a>|
     <a asp-controller="Comments" asp-action="Create" asp-route-id="@Model.Id">Add Comment</a> |
     <a asp-controller="Comments" asp-action="ViewComments" asp-route-id="@Model.Id">View Comments!</a> |
 </div>
